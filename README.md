@@ -1,2 +1,3 @@
-# mavengo
-a library to call maven commands from within go
+This is going to be a simple wrapper library for calling maven commands
+with golang
+
