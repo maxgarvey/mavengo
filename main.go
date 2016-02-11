@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/maxgarvey/mavengo/maven"
 )
@@ -10,7 +11,12 @@ import (
 func main() {
 	fmt.Printf("in main function.\n")
 
-	output, err := maven.Install("/Users/mgarve/maven_stuff/artifactory_stuff/trunk")
+	envLock := &sync.Mutex{}
+	output, err := maven.Install(
+		"",
+		"./",
+		envLock,
+	)
 	if err != nil {
 		fmt.Printf(
 			"error running maven install:\n%s\n",
