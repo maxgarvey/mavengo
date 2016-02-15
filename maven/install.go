@@ -9,20 +9,17 @@ import (
 func Install(localCache, projectDirectory, settingsFile string) ([]byte, error) {
 	// fmt.Printf("in install function.\n") // debug
 
-	originalDir, err := MoveToProjectDirectory(projectDirectory)
-	if err != nil {
-		return nil, err
-	}
-
-	// run the clean install command from the specified
+	// run the clean install command for the specified
 	// project directory
 	installCommand := exec.Command(
 		"mvn",
 		"clean",
 		"install",
-		"-Dmaven.test.skip=true", // we don't want to run tests
 		"-s",
 		settingsFile,
+		"-f",
+		projectDirectory,
+		"-Dmaven.test.skip=true", // we don't want to run tests
 	)
 
 	// add localcache option flag
@@ -34,10 +31,12 @@ func Install(localCache, projectDirectory, settingsFile string) ([]byte, error) 
 			"mvn",
 			"clean",
 			"install",
-			"-Dmaven.test.skip=true", // we don't want to run tests
 			"-s",
 			settingsFile,
+			"-f",
+			projectDirectory,
 			mavenOpts,
+			"-Dmaven.test.skip=true", // we don't want to run tests
 		)
 	}
 	output, err := installCommand.StdoutPipe()
@@ -55,11 +54,6 @@ func Install(localCache, projectDirectory, settingsFile string) ([]byte, error) 
 		return nil, err
 	}
 	installCommand.Wait()
-
-	err = ChangeDirectory(originalDir)
-	if err != nil {
-		return nil, err
-	}
 
 	return outputBytes, nil
 }

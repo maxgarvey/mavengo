@@ -6,16 +6,15 @@ import (
 	"os/exec"
 )
 
-func CleanInstallDeploy(localCache, projectDirectory string) ([]byte, error) {
-	// fmt.Printf("in install function.\n") // debug
+func PurgeLocal(localCache, projectDirectory, settingsFile string) ([]byte, error) {
+	// fmt.Printf("in purge function.\n") // debug
 
-	// run the clean install deploy command for the specified
-	// project directory
-	cleanInstallCommand := exec.Command(
+	// run the clean purge command for the specified local cache
+	purgeCommand := exec.Command(
 		"mvn",
-		"clean",
-		"install",
-		"deploy",
+		"dependency:purge-local-repository",
+		"-s",
+		settingsFile,
 		"-f",
 		projectDirectory,
 		"-Dmaven.test.skip=true", // we don't want to run tests
@@ -26,23 +25,23 @@ func CleanInstallDeploy(localCache, projectDirectory string) ([]byte, error) {
 		mavenOpts := fmt.Sprintf(
 			"-Dmaven.repo.local=%s", localCache)
 		// fmt.Printf(mavenOpts) // debug
-		cleanInstallCommand = exec.Command(
+		purgeCommand = exec.Command(
 			"mvn",
-			"clean",
-			"install",
-			"deploy",
+			"dependency:purge-local-repository",
+			"-s",
+			settingsFile,
 			"-f",
 			projectDirectory,
-			"-Dmaven.test.skip=true", // we don't want to run tests
 			mavenOpts,
+			"-Dmaven.test.skip=true", // we don't want to run tests
 		)
 	}
-	output, err := cleanInstallCommand.StdoutPipe()
+	output, err := purgeCommand.StdoutPipe()
 	if err != nil {
 		return nil, err
 	}
 
-	err = cleanInstallCommand.Start()
+	err = purgeCommand.Start()
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +50,7 @@ func CleanInstallDeploy(localCache, projectDirectory string) ([]byte, error) {
 		fmt.Printf("err:\n%v\n", err)
 		return nil, err
 	}
-	cleanInstallCommand.Wait()
+	purgeCommand.Wait()
 
 	return outputBytes, nil
 }

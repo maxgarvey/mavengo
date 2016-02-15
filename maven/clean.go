@@ -9,16 +9,13 @@ import (
 func Clean(localCache, projectDirectory string) ([]byte, error) {
 	// fmt.Printf("in clean function.\n") // debug
 
-	originalDir, err := MoveToProjectDirectory(projectDirectory)
-	if err != nil {
-		return nil, err
-	}
-
-	// run the clean command from the specified
+	// run the clean command for the specified
 	// project directory
 	cleanCommand := exec.Command(
 		"mvn",
 		"clean",
+		"-f",
+		projectDirectory,
 	)
 
 	// add localcache option flag
@@ -29,6 +26,8 @@ func Clean(localCache, projectDirectory string) ([]byte, error) {
 		cleanCommand = exec.Command(
 			"mvn",
 			"clean",
+			"-f",
+			projectDirectory,
 			mavenOpts,
 		)
 	}
@@ -46,12 +45,8 @@ func Clean(localCache, projectDirectory string) ([]byte, error) {
 		fmt.Printf("err:\n%v\n", err)
 		return nil, err
 	}
-	cleanCommand.Wait()
 
-	err = ChangeDirectory(originalDir)
-	if err != nil {
-		return nil, err
-	}
+	cleanCommand.Wait()
 
 	return outputBytes, nil
 }
