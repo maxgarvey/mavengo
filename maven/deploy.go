@@ -16,6 +16,8 @@ func Deploy(localCache, projectDirectory, settingsFile string) ([]byte, error) {
 		"deploy",
 		"-f",
 		projectDirectory,
+		"-s",
+		settingsFile,
 		"-Dmaven.test.skip=true", // we don't want to run tests
 	)
 
@@ -27,6 +29,8 @@ func Deploy(localCache, projectDirectory, settingsFile string) ([]byte, error) {
 			"deploy",
 			"-f",
 			projectDirectory,
+			"-s",
+			settingsFile,
 			"-Dmaven.test.skip=true", // we don't want to run tests
 			mavenOpts,
 		)

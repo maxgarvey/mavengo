@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func CleanInstallDeploy(localCache, projectDirectory string) ([]byte, error) {
+func CleanInstallDeploy(localCache, projectDirectory, settingsFile string) ([]byte, error) {
 	// fmt.Printf("in install function.\n") // debug
 
 	// run the clean install deploy command for the specified
@@ -18,6 +18,8 @@ func CleanInstallDeploy(localCache, projectDirectory string) ([]byte, error) {
 		"deploy",
 		"-f",
 		projectDirectory,
+		"-s",
+		settingsFile,
 		"-Dmaven.test.skip=true", // we don't want to run tests
 	)
 
@@ -33,6 +35,8 @@ func CleanInstallDeploy(localCache, projectDirectory string) ([]byte, error) {
 			"deploy",
 			"-f",
 			projectDirectory,
+			"-s",
+			settingsFile,
 			"-Dmaven.test.skip=true", // we don't want to run tests
 			mavenOpts,
 		)
