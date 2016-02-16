@@ -6,13 +6,13 @@ import (
 	"os/exec"
 )
 
-func Deploy(localCache, projectDirectory, settingsFile string) ([]byte, error) {
+func Deploy(mavenBinary, localCache, projectDirectory, settingsFile string) ([]byte, error) {
 	// fmt.Printf("in deploy function.\n") // debug
 
 	// run the deploy command for the specified
 	// project directory
 	deployCommand := exec.Command(
-		"mvn",
+		mavenBinary,
 		"deploy",
 		"-f",
 		projectDirectory,
@@ -25,7 +25,7 @@ func Deploy(localCache, projectDirectory, settingsFile string) ([]byte, error) {
 		mavenOpts := fmt.Sprintf(
 			"-Dmaven.repo.local=%s", localCache)
 		deployCommand = exec.Command(
-			"mvn",
+			mavenBinary,
 			"deploy",
 			"-f",
 			projectDirectory,

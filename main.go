@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"sync"
 
 	"github.com/maxgarvey/mavengo/maven"
 )
@@ -11,11 +10,15 @@ import (
 func main() {
 	fmt.Printf("in main function.\n")
 
-	envLock := &sync.Mutex{}
+	// local stuff, for proof of concept
+	mavenBinary := "/usr/local/bin/mvn"
+	settingsFile := "/Users/mgarve/.m2/settings.xml"
+
 	output, err := maven.Install(
+		mavenBinary,
 		"",
 		"./",
-		envLock,
+		settingsFile,
 	)
 	if err != nil {
 		fmt.Printf(

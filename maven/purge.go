@@ -6,12 +6,12 @@ import (
 	"os/exec"
 )
 
-func PurgeLocal(localCache, projectDirectory, settingsFile string) ([]byte, error) {
+func PurgeLocal(mavenBinary, localCache, projectDirectory, settingsFile string) ([]byte, error) {
 	// fmt.Printf("in purge function.\n") // debug
 
 	// run the clean purge command for the specified local cache
 	purgeCommand := exec.Command(
-		"mvn",
+		mavenBinary,
 		"dependency:purge-local-repository",
 		"-s",
 		settingsFile,
@@ -26,7 +26,7 @@ func PurgeLocal(localCache, projectDirectory, settingsFile string) ([]byte, erro
 			"-Dmaven.repo.local=%s", localCache)
 		// fmt.Printf(mavenOpts) // debug
 		purgeCommand = exec.Command(
-			"mvn",
+			mavenBinary,
 			"dependency:purge-local-repository",
 			"-s",
 			settingsFile,

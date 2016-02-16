@@ -6,13 +6,13 @@ import (
 	"os/exec"
 )
 
-func Install(localCache, projectDirectory, settingsFile string) ([]byte, error) {
+func Install(mavenBinary, localCache, projectDirectory, settingsFile string) ([]byte, error) {
 	// fmt.Printf("in install function.\n") // debug
 
 	// run the clean install command for the specified
 	// project directory
 	installCommand := exec.Command(
-		"mvn",
+		mavenBinary,
 		"clean",
 		"install",
 		"-s",
@@ -28,7 +28,7 @@ func Install(localCache, projectDirectory, settingsFile string) ([]byte, error) 
 			"-Dmaven.repo.local=%s", localCache)
 		// fmt.Printf(mavenOpts) // debug
 		installCommand = exec.Command(
-			"mvn",
+			mavenBinary,
 			"clean",
 			"install",
 			"-s",
